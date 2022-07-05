@@ -26,6 +26,14 @@ const style = {
   pb: 3,
 };
 
+const canvasWrap = {
+  height: "2048px",
+  width: "2048px",
+  zoom: "0.2",
+  backgroundSize: "cover",
+  backgroundImage: "url('bg.png')",
+}
+
 const closePopup = {
   position: "absolute",
   right: 0,
@@ -79,7 +87,7 @@ export default function DownloadCharacter({ scene, templateInfo, model, download
           <Button onClick={() => saveScreenshot('screenshot-canvas-wrap')}>Screenshot</Button>
         <div
         id="screenshot-canvas-wrap"
-        style={{ height: 2080, width: 2080, zoom: 0.2, background: "#111111" }}
+        style={canvasWrap}
       >
         <Canvas
           id="screenshot-scene"

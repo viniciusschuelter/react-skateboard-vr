@@ -6,17 +6,15 @@ import { sceneService } from "../services"
 import DownloadCharacter from "./Download"
 import LoadingOverlayCircularStatic from "./LoadingOverlay"
 import Scene from "./Scene"
-import { AnimationMixer } from "three";
+import { AnimationMixer } from "three"
+import { SkateInterface } from "../interfaces/skate"
 
-interface Avatar{
-  neck:{},
-  head:{},
-  chest:{},
-  body:{},
-  legs:{},
-  hand:{},
-  foot:{},
-  waist:{}
+const skateInitialState = {
+  deck: {},
+  grip: {},
+  truck: {},
+  wheel: {},
+  bearing: {},
 }
 
 export default function SkateEditor(props: any) {
@@ -37,27 +35,22 @@ export default function SkateEditor(props: any) {
 
   const { theme, templates, mintPopup } = props
   // Selected category State Hook
-  const [category, setCategory] = useState("desk")
+  const [category, setCategory] = useState("deck")
   // 3D Model Content State Hooks ( Scene, Nodes, Materials, Animations e.t.c ) //
   const [model, setModel] = useState<object>(Object)
 
   const [scene, setScene] = useState<object>(Object)
   // States Hooks used in template editor //
-  const [templateInfo, setTemplateInfo] = useState({ file: null, format: null, animation: null })
+  const [templateInfo, setTemplateInfo] = useState({
+    file: null,
+    format: null,
+    animation: null,
+  })
 
   const [downloadPopup, setDownloadPopup] = useState<boolean>(false)
   const [template, setTemplate] = useState<number>(1)
   const [loadingModelProgress, setLoadingModelProgress] = useState<number>(0)
-  const [ avatar,setAvatar] = useState<Avatar>({
-    neck:{},
-    head:{},
-    chest:{},
-    body:{},
-    legs:{},
-    hand:{},
-    foot:{},
-    waist:{}
-  })
+  const [skate, setSkate] = useState<SkateInterface>(skateInitialState)
   const [loadingModel, setLoadingModel] = useState<boolean>(false)
 
   const defaultTheme = createTheme({
@@ -70,18 +63,17 @@ export default function SkateEditor(props: any) {
   })
 
   useEffect(() => {
-    if(avatar){
-      sceneService.setTraits(avatar);
+    if (skate) {
+      sceneService.setParts(skate)
     }
-  }, [avatar])
+  }, [skate])
 
   useEffect(() => {
-    if(model)
-    sceneService.setModel(model);
+    if (model) sceneService.setModel(model)
   }, [model])
 
   useEffect(() => {
-    let timer, modelMixer;
+    let timer, modelMixer
     if (templateInfo.file && templateInfo.format) {
       setLoadingModel(true)
       const loader = new GLTFLoader()
@@ -90,43 +82,44 @@ export default function SkateEditor(props: any) {
           setLoadingModelProgress((e.loaded * 100) / e.total)
         })
         .then((gltf) => {
-          const vrm = gltf;
+          const vrm = gltf
           // VRM.from(gltf).then((vrm) => {
-            vrm.scene.traverse((o) => {
-              o.frustumCulled = false
-            })
-            // vrm.humanoid.getBoneNode(
-            //   VRMSchema.HumanoidBoneName.Hips,
-            // ).rotation.y = Math.PI
-            setLoadingModel(false)
-            setScene(vrm.scene)
-            setModel(vrm)
+          vrm.scene.traverse((o) => {
+            o.frustumCulled = false
+          })
+          // vrm.humanoid.getBoneNode(
+          //   VRMSchema.HumanoidBoneName.Hips,
+          // ).rotation.y = Math.PI
+          setLoadingModel(false)
+          setScene(vrm.scene)
+          setModel(vrm)
           // })
-          return vrm;
-        }).then((modelGltf) => {
+          return vrm
+        })
+        .then((modelGltf) => {
           loader.loadAsync(templateInfo.animation).then((animGltf) => {
             // modelGltf and animGltf are both gltf files
             // get the Idle animation from the model in animGltf
             // and apply the Idle animation to modelGltf
-            modelMixer = new AnimationMixer(modelGltf.scene);
-            (window as any).modelMixers = [];
-            (window as any).modelMixers.push(modelMixer);
+            modelMixer = new AnimationMixer(modelGltf.scene)
+            ;(window as any).modelMixers = []
+            ;(window as any).modelMixers.push(modelMixer)
             console.log("Loading Animation")
             const idleAnimation = animGltf.animations[0]
-            console.log("idleAnimation is", idleAnimation);
+            console.log("idleAnimation is", idleAnimation)
             timer = setInterval(() => {
-              (window as any).modelMixers.forEach((mixer) => {
-                mixer.update(1/30);
-              });
-              }, 1000/30);
-            modelMixer.clipAction(idleAnimation).play();
-            console.log("Playing on avatar", idleAnimation);
+              ;(window as any).modelMixers.forEach((mixer) => {
+                mixer.update(1 / 30)
+              })
+            }, 1000 / 30)
+            modelMixer.clipAction(idleAnimation).play()
+            console.log("Playing on avatar", idleAnimation)
           })
-        });
-        return () => {
-          clearInterval(timer);
-          modelMixer = null;
-        }
+        })
+      return () => {
+        clearInterval(timer)
+        modelMixer = null
+      }
     }
   }, [templateInfo.file])
 
@@ -155,8 +148,8 @@ export default function SkateEditor(props: any) {
               mintPopup={mintPopup}
               category={category}
               setCategory={setCategory}
-              avatar = {avatar}
-              setAvatar={setAvatar}
+              skate={skate}
+              setSkate={setSkate}
               setTemplate={setTemplate}
               template={template}
               setTemplateInfo={setTemplateInfo}

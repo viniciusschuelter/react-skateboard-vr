@@ -12,22 +12,20 @@ export default function Selector(props) {
     templates,
     category,
     scene,
-    avatar,
-    setAvatar,
-    setTemplate,
-    template,
+    skate,
+    setSkate,
     setTemplateInfo,
     templateInfo,
   }: any = props
   const [selectValue, setSelectValue] = useState("0")
 
   const [collection, setCollection] = useState([])
-  const [traitName, setTraitName] = useState("")
+  const [partName, setPartName] = useState("")
 
-  const [loadingTrait, setLoadingTrait] = useState(null)
-  const [loadingTraitOverlay, setLoadingTraitOverlay] = useState(false)
+  const [loadingPart, setLoadingPart] = useState(null)
+  const [loadingPartOverlay, setLoadingPartOverlay] = useState(false)
 
-  const [noTrait, setNoTrait] = useState(true)
+  const [noPart, setNoPart] = useState(true)
   const [loaded, setLoaded] = useState(false)
 
   const handleChangeSkin = (event: Event, value: number | number[]) => {
@@ -43,12 +41,10 @@ export default function Selector(props) {
     bottom: "93px",
     width: "100vw",
     boxSizing: "border-box" as "border-box",
-    backgroundColor: "#111111",
-    borderTop: "1px solid #303030",
     padding: "14px 0px 14px 32px !important",
   }
 
-  const loadingTraitStyle = {
+  const loadingPartStyle = {
     height: "52px",
     width: "52px",
     textAlign: "center" as "center",
@@ -70,8 +66,8 @@ export default function Selector(props) {
     cursor: "pointer" as "pointer",
   }
 
-  // loading-trait-overlay
-  const loadingTraitOverlayStyle = {
+  // loading-part-overlay
+  const loadingPartOverlayStyle = {
     position: "fixed" as "fixed",
     left: "0",
     top: "0",
@@ -86,7 +82,7 @@ export default function Selector(props) {
       apiService.fetchPartsByCategory(category).then((parts) => {
         if (parts) {
           setCollection(parts?.collection)
-          setTraitName(parts?.part)
+          setPartName(parts?.part)
         }
       })
     }
@@ -95,14 +91,13 @@ export default function Selector(props) {
   React.useEffect(() => {
     if (!scene) return
     async function _get() {
-      // const categories = ["neck", "chest", "waist", "foot"]
       if (!loaded) {
         setTempInfo("1")
         if (scene && templateInfo) {
           // for (const category of categories) {
           //   apiService.fetchTraitsByCategory(category).then((traits) => {
-          //     if (traits) {
-          //       selectTrait(traits?.collection[0])
+          //     if (parts) {
+          //       selectParts(parts?.collection[0])
           //     }
           //   })
           // }
@@ -118,7 +113,7 @@ export default function Selector(props) {
 
   React.useEffect(() => {
     if (scene) {
-      sceneService.setScene(scene);
+      sceneService.setScene(scene)
     }
   }, [scene])
 
@@ -128,65 +123,29 @@ export default function Selector(props) {
       setTemplateInfo(res)
     })
   }
-  const selectTrait = (trait: any) => {
+
+  const selectPart = (part: any) => {
     if (scene) {
-      if (trait === "0") {
-        setNoTrait(true)
-        if (traitName === "neck") {
-          if (avatar.neck) {
-            scene.remove(avatar.neck.model)
-          }
-        }
-        if (traitName === "head") {
-          if (avatar.head) {
-            scene.remove(avatar.head.model)
-          }
-        }
-        if (traitName === "chest") {
-          if (avatar.chest) {
-            scene.remove(avatar.chest.model)
-          }
-        }
-        if (traitName === "body") {
-          if (avatar.body) {
-            scene.remove(avatar.body.model)
-          }
-        }
-        if (traitName === "legs") {
-          if (avatar.legs) {
-            scene.remove(avatar.legs.model)
-          }
-        }
-        if (traitName === "hand") {
-          if (avatar.hand) {
-            scene.remove(avatar.hand.model)
-          }
-        }
-        if (traitName === "foot") {
-          if (avatar.foot) {
-            scene.remove(avatar.foot.model)
-          }
-        }
-        if (traitName === "waist") {
-          if (avatar.waist) {
-            scene.remove(avatar.waist.model)
-          }
-        }
+      if (skate && skate[category]) {
+        scene.remove(skate[category].model)
+      }
+      if (part === "0") {
+        setNoPart(true)
       } else {
-        setLoadingTraitOverlay(true)
-        setNoTrait(false)
+        setLoadingPartOverlay(true)
+        setNoPart(false)
         const loader = new GLTFLoader()
-        let timer, modelMixer;
+        let timer, modelMixer
         loader
           .loadAsync(
-            `${templateInfo.traitsDirectory}${trait?.directory}`,
+            `${templateInfo.traitsDirectory}${part?.directory}`,
             (e) => {
               // console.log((e.loaded * 100) / e.total);
-              setLoadingTrait(Math.round((e.loaded * 100) / e.total))
+              setLoadingPart(Math.round((e.loaded * 100) / e.total))
             },
           )
           .then(async (gltf) => {
-            const vrm = gltf;
+            const vrm = gltf
             // VRM.from(gltf).then(async (vrm) => {
             // vrm.scene.scale.z = -1;
             // console.log("scene.add", scene.add)
@@ -212,228 +171,136 @@ export default function Selector(props) {
             //   VRMSchema.HumanoidBoneName.Hips,
             // ).rotation.y = Math.PI
             vrm.scene.frustumCulled = false
-            // console.log(trait);
-            if (traitName === "neck") {
-              console.log("HAIR")
-              setAvatar({
-                ...avatar,
-                neck: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.neck) {
-                scene.remove(avatar.neck.model)
-              }
-            }
-            if (traitName === "head") {
-              setAvatar({
-                ...avatar,
-                head: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.head) {
-                scene.remove(avatar.head.model)
-              }
-            }
-            if (traitName === "chest") {
-              setAvatar({
-                ...avatar,
-                chest: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.chest) {
-                scene.remove(avatar.chest.model)
-              }
-            }
-            if (traitName === "body") {
-              setAvatar({
-                ...avatar,
-                body: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.body) {
-                scene.remove(avatar.body.model)
-              }
-            }
-            if (traitName === "legs") {
-              setAvatar({
-                ...avatar,
-                legs: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.legs) {
-                scene.remove(avatar.legs.model)
-              }
-            }
-            if (traitName === "hand") {
-              setAvatar({
-                ...avatar,
-                hand: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.hand) {
-                scene.remove(avatar.hand.model)
-              }
-            }
-            if (traitName === "foot") {
-              setAvatar({
-                ...avatar,
-                foot: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.foot) {
-                scene.remove(avatar.foot.model)
-              }
-            }
-            if (traitName === "waist") {
-              setAvatar({
-                ...avatar,
-                waist: {
-                  traitInfo: trait,
-                  model: vrm.scene,
-                }
-              })
-              if (avatar.waist) {
-                scene.remove(avatar.waist.model)
-              }
-            }
-            setLoadingTrait(null)
-            setLoadingTraitOverlay(false)
-            return vrm;
+            setSkate({
+              ...skate,
+              [category]: {
+                traitInfo: part,
+                model: vrm.scene,
+              },
+            })
+            setLoadingPart(null)
+            setLoadingPartOverlay(false)
+            return vrm
           })
           .then((modelGltf) => {
             loader.loadAsync(templateInfo.animation).then((animGltf) => {
               // modelGltf and animGltf are both gltf files
               // get the Idle animation from the model in animGltf
               // and apply the Idle animation to modelGltf
-              modelMixer = new AnimationMixer(modelGltf.scene);
-              (window as any).modelMixers.push(modelMixer);
+              modelMixer = new AnimationMixer(modelGltf.scene)
+              ;(window as any).modelMixers.push(modelMixer)
 
-              (window as any).modelMixers.forEach((mixer) => {
-                mixer.setTime(0);
-              });
+              ;(window as any).modelMixers.forEach((mixer) => {
+                mixer.setTime(0)
+              })
 
               const idleAnimation = animGltf.animations[0]
-              modelMixer.clipAction(idleAnimation).play();
+              modelMixer.clipAction(idleAnimation).play()
 
               console.log("Playing")
-              console.log(modelGltf.scene);
+              console.log(modelGltf.scene)
             })
-          });
+          })
         return () => {
           // remove modelMixer from (window as any).modelMixers array
-          (window as any).modelMixers.forEach((mixer, index) => {
+          ;(window as any).modelMixers.forEach((mixer, index) => {
             if (mixer === modelMixer) {
-              (window as any).modelMixers.splice(index, 1)
+              ;(window as any).modelMixers.splice(index, 1)
             }
-          }
-          )
+          })
 
-          modelMixer = null;
-
+          modelMixer = null
         }
         // })
       }
-      setSelectValue(trait?.id)
+      setSelectValue(part?.id)
     }
   }
 
-    return (
-      <div className="selector-container" style={selectorContainer}>
-        {templateInfo?.traitsDirectory && (
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="left"
-            alignItems="left"
-            divider={<Divider orientation="vertical" flexItem />}
-          >
-            {category === "color" ? (
-              <Slider
-                defaultValue={255}
-                valueLabelDisplay="off"
-                step={1}
-                max={255}
-                min={0}
-                onChange={handleChangeSkin}
-                sx={{ width: "50%", margin: "30px 0" }}
-              />
-            ) : (
-              <React.Fragment>
-                <div
-                  style={selectorButton}
-                  className={`selector-button ${noTrait ? "active" : ""}`}
-                  onClick={() => selectTrait("0")}
-                >
-                  <Avatar className="icon">
-                    <DoNotDisturbIcon />
-                  </Avatar>
-                </div>
-                {collection &&
-                  collection.map((item: any, index) => {
-                    return (
-                      <div
-                        key={index}
-                        style={selectorButton}
-                        className={`selector-button coll-${traitName} ${selectValue === item?.id ? "active" : ""
-                          }`}
-                        onClick={() => {
-                          if (category === "base") {
-                            setLoaded(true)
-                            setTempInfo(item.id)
-                          }
-                          selectTrait(item)
-                        }}
-                      >
-                        <Avatar
-                          className="icon"
-                          src={
-                            item.thumbnailsDirectory
-                              ? item.thumbnail
-                              : `${templateInfo?.thumbnailsDirectory}${item?.thumbnail}`
-                          }
-                        />
-                        {selectValue === item?.id && loadingTrait > 0 && (
-                          <Typography
-                            className="loading-trait"
-                            style={loadingTraitStyle}
-                          >
-                            {loadingTrait}%
-                          </Typography>
-                        )}
-                      </div>
-                    )
-                  })}
-                <div style={{ visibility: "hidden" }}>
-                  <Avatar className="icon" />
-                </div>
-              </React.Fragment>
-            )}
-          </Stack>
-        )}
-        <div
-          className={
-            loadingTraitOverlay
-              ? "loading-trait-overlay show"
-              : "loading-trait-overlay"
-          }
-          style={
-            loadingTraitOverlay ? loadingTraitOverlayStyle : { display: "none" }
-          }
-        />
-      </div>
-    )
-  }
+  return (
+    <div className="selector-container" style={selectorContainer}>
+      {templateInfo?.traitsDirectory && (
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          divider={<Divider orientation="vertical" flexItem />}
+        >
+          {category === "color" ? (
+            <Slider
+              defaultValue={255}
+              valueLabelDisplay="off"
+              step={1}
+              max={255}
+              min={0}
+              onChange={handleChangeSkin}
+              sx={{ width: "50%", margin: "30px 0" }}
+            />
+          ) : (
+            <React.Fragment>
+              <div
+                style={selectorButton}
+                className={`selector-button ${noPart ? "active" : ""}`}
+                onClick={() => selectPart("0")}
+              >
+                <Avatar className="icon">
+                  <DoNotDisturbIcon />
+                </Avatar>
+              </div>
+              {collection &&
+                collection.map((item: any, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={selectorButton}
+                      className={`selector-button coll-${partName} ${
+                        selectValue === item?.id ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        if (category === "base") {
+                          setLoaded(true)
+                          setTempInfo(item.id)
+                        }
+                        selectPart(item)
+                      }}
+                    >
+                      <Avatar
+                        className="icon"
+                        src={
+                          item.thumbnailsDirectory
+                            ? item.thumbnail
+                            : `${templateInfo?.thumbnailsDirectory}${item?.thumbnail}`
+                        }
+                      />
+                      {selectValue === item?.id && loadingPart > 0 && (
+                        <Typography
+                          className="loading-trait"
+                          style={loadingPartStyle}
+                        >
+                          {loadingPart}%
+                        </Typography>
+                      )}
+                    </div>
+                  )
+                })}
+              <div style={{ visibility: "hidden" }}>
+                <Avatar className="icon" />
+              </div>
+            </React.Fragment>
+          )}
+        </Stack>
+      )}
+      <div
+        className={
+          loadingPartOverlay
+            ? "loading-part-overlay show"
+            : "loading-part-overlay"
+        }
+        style={
+          loadingPartOverlay ? loadingPartOverlayStyle : { display: "none" }
+        }
+      />
+    </div>
+  )
+}

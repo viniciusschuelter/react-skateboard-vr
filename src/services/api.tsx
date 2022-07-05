@@ -1,5 +1,5 @@
-import {skateDecks} from "../data/skate-decks";
-import {skateParts} from '../data/skate-parts';
+import {skateDecks} from "../mocks/skate-decks";
+import {skateParts} from '../mocks/skate-parts';
 
 export const apiService = {
   fetchTemplate,

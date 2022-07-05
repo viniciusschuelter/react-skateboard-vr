@@ -6,7 +6,6 @@ import { Buffer } from "buffer";
 import html2canvas from "html2canvas";
 import { VRM } from "@pixiv/three-vrm";
 import VRMExporter from "../library/VRM/VRMExporter";
-// import VRMExporter from "../library/VRM/vrm-exporter";
 
 function getArrayBuffer (buffer) { return new Blob([buffer], { type: "application/octet-stream" }); }
 
@@ -24,13 +23,13 @@ const setScene = (newScene: any) => {
 
 const getScene = () => scene;
 
-let traits = {};
+let parts = {};
 
-const setTraits = (newTraits: any) => {
-  traits = newTraits;
+const setParts = (newParts: any) => {
+  parts = newParts;
 }
 
-const getTraits = () => traits;
+const getParts = () => parts;
 
 async function getModelFromScene(format = 'glb') {
   if (format && format === 'glb') {
@@ -266,7 +265,7 @@ export const sceneService = {
   getModelFromScene,
   setScene,
   getScene,
-  getTraits,
-  setTraits,
+  getParts,
+  setParts,
   setModel
 };

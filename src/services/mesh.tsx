@@ -18,7 +18,7 @@ async function setMeshType(meshType: any) {
 //   if (selection) {
 //     let poseData: any;
 //     await axios.get("models/poses/" + selection.file + ".json").then((res) => {
-//       poseData = res.data;
+//       poseData = res.mocks;
 //       (window as any).loadPose(poseData, bones);
 //       return poseData;
 //     });

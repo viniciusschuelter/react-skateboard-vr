@@ -1,13 +1,13 @@
-import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
-import { OrbitControls } from "@react-three/drei/core/OrbitControls";
-import { Canvas } from "@react-three/fiber";
-import React, { useEffect } from "react";
-import Editor from "./Editor";
-import { TemplateModel } from "./Models";
-import Selector from "./Selector";
+import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera"
+import { OrbitControls } from "@react-three/drei/core/OrbitControls"
+import { Canvas } from "@react-three/fiber"
+import React, { useEffect } from "react"
+import Editor from "./Editor"
+import { TemplateModel } from "./Models"
+import Selector from "./Selector"
 
 export default function Scene(props: any) {
-  const { 
+  const {
     wrapClass,
     templates,
     scene,
@@ -15,33 +15,36 @@ export default function Scene(props: any) {
     mintPopup,
     category,
     setCategory,
-    avatar,
-    setAvatar,
+    skate,
+    setSkate,
     setTemplate,
     template,
     setTemplateInfo,
-    templateInfo }: any = props;
+    templateInfo,
+  }: any = props
 
-    const canvasWrap = {
-      height: "100vh",
-      width: "100vw",
-      position: "absolute" as "absolute",
-      zIndex: "0",
-      top: "0",
-      backgroundSize: 'cover',
-      backgroundImage: "url('bg.png')"
-    }
+  const canvasWrap = {
+    height: "100vh",
+    width: "100vw",
+    position: "absolute" as "absolute",
+    zIndex: "0",
+    top: "0",
+    backgroundSize: "cover",
+    backgroundImage: "url('bg.png')",
+  }
 
   return (
-    <div style={{
-      width: "100vw",
-      height: "100vh",
-      position: "relative" as "relative"
-    }}>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "relative" as "relative",
+      }}
+    >
       <div
         id="canvas-wrap"
         className={`canvas-wrap ${wrapClass && wrapClass}`}
-        style={{ ...canvasWrap, height: window.innerHeight - 89 }}
+        style={canvasWrap}
       >
         <Canvas
           className="canvas"
@@ -82,11 +85,8 @@ export default function Scene(props: any) {
             enablePan={true}
             target={[0, 1, 0]}
           />
-          <PerspectiveCamera
-          >
-            {!downloadPopup && !mintPopup && (
-              <TemplateModel scene={scene} />
-            )}
+          <PerspectiveCamera>
+            {!downloadPopup && !mintPopup && <TemplateModel scene={scene} />}
           </PerspectiveCamera>
         </Canvas>
       </div>
@@ -95,8 +95,8 @@ export default function Scene(props: any) {
           templates={templates}
           category={category}
           scene={scene}
-          avatar = {avatar}
-          setAvatar={setAvatar}
+          skate={skate}
+          setSkate={setSkate}
           setTemplate={setTemplate}
           template={template}
           setTemplateInfo={setTemplateInfo}
@@ -105,5 +105,5 @@ export default function Scene(props: any) {
         <Editor category={category} setCategory={setCategory} />
       </div>
     </div>
-  );
+  )
 }

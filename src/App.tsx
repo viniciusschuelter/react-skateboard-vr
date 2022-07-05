@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 import React, {  useState } from "react";
-import { skateDecks } from "./data/skate-decks";
+import { skateDecks } from "./mocks/skate-decks";
 import SkateEditor from "./components/index";
 
 const theme = createTheme({

@@ -1,6 +1,6 @@
 export const skateParts = [
     {
-      "part": "desk",
+      "part": "deck",
       "type": "mesh",
       "collection": [
         {
@@ -36,7 +36,7 @@ export const skateParts = [
       ]
     },
     {
-      "part": "gripe",
+      "part": "grip",
       "type": "mesh",
       "collection": [
         {
