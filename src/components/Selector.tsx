@@ -16,14 +16,13 @@ export default function Selector(props) {
     setSkate,
     setTemplateInfo,
     templateInfo,
+    loading,
+    setLoading
   }: any = props
   const [selectValue, setSelectValue] = useState("0")
 
   const [collection, setCollection] = useState([])
   const [partName, setPartName] = useState("")
-
-  const [loadingPart, setLoadingPart] = useState(null)
-  const [loadingPartOverlay, setLoadingPartOverlay] = useState(false)
 
   const [noPart, setNoPart] = useState(true)
   const [loaded, setLoaded] = useState(false)
@@ -44,19 +43,6 @@ export default function Selector(props) {
     padding: "14px 0px 14px 32px !important",
   }
 
-  const loadingPartStyle = {
-    height: "52px",
-    width: "52px",
-    textAlign: "center" as "center",
-    lineHeight: "52px",
-    backgroundColor: "rgba(16,16,16,0.6)",
-    zIndex: "2",
-    position: "absolute" as "absolute",
-    color: "#efefef",
-    left: "0",
-    top: "0",
-  }
-
   const selectorButton = {
     color: "#999999",
     textAlign: "center" as "center",
@@ -64,16 +50,6 @@ export default function Selector(props) {
     minWidth: "60px",
     margin: "20px 0",
     cursor: "pointer" as "pointer",
-  }
-
-  // loading-part-overlay
-  const loadingPartOverlayStyle = {
-    position: "fixed" as "fixed",
-    left: "0",
-    top: "0",
-    width: "100%,",
-    height: "100%,",
-    backgroundColor: "rgba(16,16,16,0.8)",
   }
 
   React.useEffect(() => {
@@ -132,7 +108,7 @@ export default function Selector(props) {
       if (part === "0") {
         setNoPart(true)
       } else {
-        setLoadingPartOverlay(true)
+        // setLoadingPartOverlay(true)
         setNoPart(false)
         const loader = new GLTFLoader()
         let timer, modelMixer
@@ -141,7 +117,7 @@ export default function Selector(props) {
             `${templateInfo.traitsDirectory}${part?.directory}`,
             (e) => {
               // console.log((e.loaded * 100) / e.total);
-              setLoadingPart(Math.round((e.loaded * 100) / e.total))
+              setLoading(Math.round((e.loaded * 100) / e.total))
             },
           )
           .then(async (gltf) => {
@@ -178,8 +154,9 @@ export default function Selector(props) {
                 model: vrm.scene,
               },
             })
-            setLoadingPart(null)
-            setLoadingPartOverlay(false)
+            setTimeout(() => {
+              setLoading(0)
+            }, 400)
             return vrm
           })
           .then((modelGltf) => {
@@ -273,14 +250,6 @@ export default function Selector(props) {
                             : `${templateInfo?.thumbnailsDirectory}${item?.thumbnail}`
                         }
                       />
-                      {selectValue === item?.id && loadingPart > 0 && (
-                        <Typography
-                          className="loading-trait"
-                          style={loadingPartStyle}
-                        >
-                          {loadingPart}%
-                        </Typography>
-                      )}
                     </div>
                   )
                 })}
@@ -291,16 +260,6 @@ export default function Selector(props) {
           )}
         </Stack>
       )}
-      <div
-        className={
-          loadingPartOverlay
-            ? "loading-part-overlay show"
-            : "loading-part-overlay"
-        }
-        style={
-          loadingPartOverlay ? loadingPartOverlayStyle : { display: "none" }
-        }
-      />
     </div>
   )
 }

@@ -18,7 +18,7 @@ function CircularProgressWithLabel(props : CircularProgressProps & {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "rgba(16,16,16,0.9)"
+                backgroundColor: "rgba(16,16,16,0.3)"
             }
         }>
             <Box sx={

@@ -21,6 +21,8 @@ export default function Scene(props: any) {
     template,
     setTemplateInfo,
     templateInfo,
+    loading,
+    setLoading
   }: any = props
 
   const canvasWrap = {
@@ -101,6 +103,8 @@ export default function Scene(props: any) {
           template={template}
           setTemplateInfo={setTemplateInfo}
           templateInfo={templateInfo}
+          setLoading={setLoading}
+          loading={loading}
         />
         <Editor category={category} setCategory={setCategory} />
       </div>

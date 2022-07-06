@@ -49,9 +49,8 @@ export default function SkateEditor(props: any) {
 
   const [downloadPopup, setDownloadPopup] = useState<boolean>(false)
   const [template, setTemplate] = useState<number>(1)
-  const [loadingModelProgress, setLoadingModelProgress] = useState<number>(0)
+  const [loading, setLoading] = useState<number>(0)
   const [skate, setSkate] = useState<SkateInterface>(skateInitialState)
-  const [loadingModel, setLoadingModel] = useState<boolean>(false)
 
   const defaultTheme = createTheme({
     palette: {
@@ -75,11 +74,10 @@ export default function SkateEditor(props: any) {
   useEffect(() => {
     let timer, modelMixer
     if (templateInfo.file && templateInfo.format) {
-      setLoadingModel(true)
       const loader = new GLTFLoader()
       loader
         .loadAsync(templateInfo.file, (e) => {
-          setLoadingModelProgress((e.loaded * 100) / e.total)
+          setLoading((e.loaded * 100) / (e.total || 1));
         })
         .then((gltf) => {
           const vrm = gltf
@@ -90,7 +88,7 @@ export default function SkateEditor(props: any) {
           // vrm.humanoid.getBoneNode(
           //   VRMSchema.HumanoidBoneName.Hips,
           // ).rotation.y = Math.PI
-          setLoadingModel(false)
+          setLoading(0)
           setScene(vrm.scene)
           setModel(vrm)
           // })
@@ -101,12 +99,12 @@ export default function SkateEditor(props: any) {
             // modelGltf and animGltf are both gltf files
             // get the Idle animation from the model in animGltf
             // and apply the Idle animation to modelGltf
-            modelMixer = new AnimationMixer(modelGltf.scene)
-            ;(window as any).modelMixers = []
-            ;(window as any).modelMixers.push(modelMixer)
-            console.log("Loading Animation")
-            const idleAnimation = animGltf.animations[0]
-            console.log("idleAnimation is", idleAnimation)
+            modelMixer = new AnimationMixer(modelGltf.scene);
+            (window as any).modelMixers = [];
+            (window as any).modelMixers.push(modelMixer);
+            console.log("Loading Animation");
+            const idleAnimation = animGltf.animations[0];
+            console.log("idleAnimation is", idleAnimation);
             timer = setInterval(() => {
               ;(window as any).modelMixers.forEach((mixer) => {
                 mixer.update(1 / 30)
@@ -128,9 +126,9 @@ export default function SkateEditor(props: any) {
       <ThemeProvider theme={theme ?? defaultTheme}>
         {templateInfo && (
           <Fragment>
-            {loadingModel && (
+            {!!loading && (
               <LoadingOverlayCircularStatic
-                loadingModelProgress={loadingModelProgress}
+                loadingModelProgress={loading}
               />
             )}
             <DownloadCharacter
@@ -154,6 +152,8 @@ export default function SkateEditor(props: any) {
               template={template}
               setTemplateInfo={setTemplateInfo}
               templateInfo={templateInfo}
+              loading={loading}
+              setLoading={setLoading}
             />
           </Fragment>
         )}
