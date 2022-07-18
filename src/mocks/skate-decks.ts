@@ -1,8 +1,8 @@
 export const skateDecks = [
   {
     "id": "1",
-    "name": "Body1",
-    "file": "/body1.glb",
+    "name": "skateboard",
+    "file": "/empty_scene.glb",
     "animation": "/Animation.glb",
     "thumbnail": "/body1.png",
     "format": "glb",
@@ -11,8 +11,8 @@ export const skateDecks = [
   },
   {
     "id": "2",
-    "name": "body2",
-    "file": "/body2.glb",
+    "name": "skateboard",
+    "file": "/skateboard.glb",
     "animation": "/Animation.glb",
     "thumbnail": "/body1.png",
     "format": "glb",

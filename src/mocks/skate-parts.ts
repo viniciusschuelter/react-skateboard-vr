@@ -6,7 +6,7 @@ export const skateParts = [
         {
           "id": "body-divine_robe",
           "name": "Divine Robe",
-          "directory": "body/Divine_Robe/divine_robe.glb",
+          "directory": "deck.glb",
           "thumbnail": "body/Divine_Robe/divine_robe.jpg"
         },
         {
@@ -108,7 +108,7 @@ export const skateParts = [
         {
           "id": "foot-chain_boots",
           "name": "Chain Boots",
-          "directory": "foot/Chain_Boots/chain_boots.glb",
+          "directory": "truck.glb",
           "thumbnail": "foot/Chain_Boots/chain_boots.jpg"
         },
         {
@@ -186,7 +186,7 @@ export const skateParts = [
         {
           "id": "hand-chain_gloves",
           "name": "Chain Gloves",
-          "directory": "hand/Chain_Gloves/chain_gloves.glb",
+          "directory": "wheel.glb",
           "thumbnail": "hand/Chain_Gloves/chain_gloves.jpg"
         },
         {

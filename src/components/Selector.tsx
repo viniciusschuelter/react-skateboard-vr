@@ -110,11 +110,12 @@ export default function Selector(props) {
       } else {
         // setLoadingPartOverlay(true)
         setNoPart(false)
+        console.log(`${templateInfo.traitsDirectory}${part?.directory}`);
         const loader = new GLTFLoader()
         let timer, modelMixer
         loader
           .loadAsync(
-            `${templateInfo.traitsDirectory}${part?.directory}`,
+            `${part?.directory}`,
             (e) => {
               // console.log((e.loaded * 100) / e.total);
               setLoading(Math.round((e.loaded * 100) / e.total))
@@ -164,6 +165,7 @@ export default function Selector(props) {
               // modelGltf and animGltf are both gltf files
               // get the Idle animation from the model in animGltf
               // and apply the Idle animation to modelGltf
+              modelGltf.scene.children.forEach( (mesh: any) => mesh.material.color.set( 0xffffff * Math.random()));
               modelMixer = new AnimationMixer(modelGltf.scene)
               ;(window as any).modelMixers.push(modelMixer)
 
