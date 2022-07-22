@@ -54,9 +54,12 @@ export default function Editor(props: any) {
         position: "absolute",
         left: "0",
         bottom: "0",
-        width: "100vw",
+        width: "calc(100vw - 28px)",
         backgroundColor: "rgba(0,0,0, 0,25)",
-        padding: "14px 0",
+        padding: "14px",
+        display: "flex",
+        justifyContent: "center",
+        overflow: "auto",
       }}
     >
       <Stack

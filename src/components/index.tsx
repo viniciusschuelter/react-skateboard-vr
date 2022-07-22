@@ -18,22 +18,6 @@ const skateInitialState = {
 }
 
 export default function SkateEditor(props: any) {
-  // State Hooks For Character Editor ( Base ) //
-  // ---------- //
-  // Charecter Name State Hook ( Note: this state will also update the name over the 3D model. )
-  // const [characterName, setCharacterName] =
-  //   useState<string>("Character Name");
-  // Categories State and Loaded Hooks
-  // const [categories, setCategories] = useState([]);
-  // const [categoriesLoaded, setCategoriesLoaded] =
-  //   useState<boolean>(false);
-  // TODO: Where is setNodes
-  // const [nodes, setNodes] = useState<object>(Object);
-  // const [materials, setMaterials] = useState<object>(Object);
-  // const [animations, setAnimations] = useState<object>(Object);
-  // const [body, setBody] = useState<any>();
-
-  const { theme, templates, mintPopup } = props
   // Selected category State Hook
   const [category, setCategory] = useState("deck")
   // 3D Model Content State Hooks ( Scene, Nodes, Materials, Animations e.t.c ) //
@@ -123,7 +107,7 @@ export default function SkateEditor(props: any) {
 
   return (
     <Suspense fallback="loading...">
-      <ThemeProvider theme={theme ?? defaultTheme}>
+      <ThemeProvider theme={defaultTheme}>
         {templateInfo && (
           <Fragment>
             {!!loading && (
@@ -140,10 +124,8 @@ export default function SkateEditor(props: any) {
             />
             <Scene
               wrapClass="generator"
-              templates={templates}
               scene={scene}
               downloadPopup={downloadPopup}
-              mintPopup={mintPopup}
               category={category}
               setCategory={setCategory}
               skate={skate}

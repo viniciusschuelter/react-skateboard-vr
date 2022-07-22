@@ -12,7 +12,6 @@ export default function Scene(props: any) {
     templates,
     scene,
     downloadPopup,
-    mintPopup,
     category,
     setCategory,
     skate,
@@ -88,7 +87,7 @@ export default function Scene(props: any) {
             target={[0, 1, 0]}
           />
           <PerspectiveCamera>
-            {!downloadPopup && !mintPopup && <TemplateModel scene={scene} />}
+            {!downloadPopup && <TemplateModel scene={scene} />}
           </PerspectiveCamera>
         </Canvas>
       </div>

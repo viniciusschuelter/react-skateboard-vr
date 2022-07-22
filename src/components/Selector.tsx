@@ -35,12 +35,15 @@ export default function Selector(props) {
 
   const selectorContainer = {
     position: "absolute" as "absolute",
+    display: "flex",
+    justifyContent: "center",
     height: "5rem",
     left: "0",
     bottom: "93px",
     width: "100vw",
     boxSizing: "border-box" as "border-box",
     padding: "14px 0px 14px 32px !important",
+    overflow: "auto"
   }
 
   const selectorButton = {
@@ -246,10 +249,7 @@ export default function Selector(props) {
                     >
                       <Avatar
                         className="icon"
-                        src={
-                          item.thumbnailsDirectory
-                            ? item.thumbnail
-                            : `${templateInfo?.thumbnailsDirectory}${item?.thumbnail}`
+                        src={`/${item?.thumbnail}`
                         }
                       />
                     </div>
