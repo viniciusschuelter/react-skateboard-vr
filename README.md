@@ -2,9 +2,9 @@
 
 ###### This is a simple project to mount your skateboard, hope you enjoy it.
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c34bdb0d-da9f-4c34-8a20-a44bc24e1510/deploy-status)](https://app.netlify.com/sites/shophub2022/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a490c973-d940-49ac-b34c-cfba20c965db/deploy-status)](https://app.netlify.com/sites/skateshop-vr/deploys)
 
-[Live demo](https://shophub2022.netlify.app)
+[Live demo](https://skateshop-vr.netlify.app/)
 
 ## Development server
 
